@@ -3,7 +3,6 @@ import httpx
 
 async def interact_with_calculator_server():
     id = input("what it your id?")
-    port = input("what is the port of the nats you want to connect?")
     print("Welcome to the calculator program. Enter 'Q' to quit at any time.")
 
     while True:
@@ -28,7 +27,7 @@ async def interact_with_calculator_server():
 
         url = "http://localhost:8000/connect-nats"  # URL of the calculator service
 
-        headers = {"user-id": f"{id}" , "operator" : f"{operator}", "num" : f"{num}","port" : f"{port}"}  # desired user agent
+        headers = {"user-id": f"{id}" , "operator" : f"{operator}", "num" : f"{num}"}  # desired user agent
 
         async with httpx.AsyncClient() as client:
             response = await client.get(url, headers=headers,timeout=20)

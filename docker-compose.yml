@@ -21,6 +21,8 @@ services:
     depends_on:
       - calc-server
     # Add your FastAPI server command here
+    ports:
+      - 8000:8000
 
   client:
     build:

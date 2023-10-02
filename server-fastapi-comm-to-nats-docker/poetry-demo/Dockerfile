@@ -5,15 +5,12 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Copy the Pyproject.toml and poetry.lock files into the container
-COPY pyproject.toml poetry.lock ./
+COPY . .
 
 # Install Poetry and project dependencies
 RUN pip install --no-cache-dir poetry && \
     poetry config virtualenvs.create false && \
     poetry install --no-dev --no-interaction --no-ansi
-
-# Copy your FastAPI server code into the container
-COPY . .
 
 # Expose the port your FastAPI server will run on
 EXPOSE 8000

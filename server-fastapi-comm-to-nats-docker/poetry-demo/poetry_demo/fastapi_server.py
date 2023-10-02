@@ -8,6 +8,7 @@ from nats.aio.errors import ErrConnectionClosed, ErrTimeout
 from typing import Annotated, Dict
 from fastapi import FastAPI, Header, HTTPException
 from fastapi.openapi.utils import get_openapi
+import uvicorn
 
 app = FastAPI()
 
@@ -38,19 +39,20 @@ parser.add_argument("--nats-port", type=int, default=DEFAULT_NATS_PORT, help="NA
 
 @app.get("/connect-nats")
 async def connect_nats(num: str = Header(None),operator: str = Header(None),
-    user_id: str = Header(None),port: str = Header("4222")
+    user_id: str = Header(None)
 ):
+    
     global nats_port  # Access the global variable
     subject = "calc"
     request_data = {
         "num": num,
         "user_id": user_id,
         "operator": operator,
-        "port" : port
+        "port" : 4222
         
     }
-    await nc.connect(f"nats://{nats_server_address}:{port}")  # Updated connection to use environment variable
-
+    nc = NATS()
+    await nc.connect(f"nats://{nats_server_address}:4222")  # Updated connection to use environment variable
 
     try:
         response = await nc.request(subject, json.dumps(request_data).encode(), timeout=30)
@@ -62,12 +64,9 @@ async def connect_nats(num: str = Header(None),operator: str = Header(None),
         print("An error occurred while communicating with the calculator service:", str(e))
 
 if __name__ == "__main__":
-    import uvicorn
-    nc = NATS()
+    
 
     # Read the NATS server address from the environment variable
     nats_server_address = os.environ.get("NATS_SERVER_ADDRESS", "localhost")
-
-    
 
     uvicorn.run(app, host="0.0.0.0", port=8000)
