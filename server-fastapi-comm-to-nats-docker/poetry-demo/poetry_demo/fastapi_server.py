@@ -47,12 +47,10 @@ async def connect_nats(num: str = Header(None),operator: str = Header(None),
     request_data = {
         "num": num,
         "user_id": user_id,
-        "operator": operator,
-        "port" : 4222
-        
+        "operator": operator 
     }
     nc = NATS()
-    await nc.connect(f"nats://{nats_server_address}:4222")  # Updated connection to use environment variable
+    await nc.connect(nats://localhost:4222")  # Updated connection to use environment variable
 
     try:
         response = await nc.request(subject, json.dumps(request_data).encode(), timeout=30)
