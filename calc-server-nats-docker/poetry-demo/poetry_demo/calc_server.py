@@ -93,7 +93,7 @@ async def handle_message(msg):
         print(f"Error publishing message: {str(e)}")
 
 async def start_server(nats_port):
-    await nc.connect(f"nats://{nats_server_address}:{nats_port}")  # Updated connection to use environment variable
+    await nc.connect(nats://localhost:4222")  # Updated connection to use environment variable
     await nc.subscribe("calc", cb=handle_message)
 
 ######### running the NATS server ########
