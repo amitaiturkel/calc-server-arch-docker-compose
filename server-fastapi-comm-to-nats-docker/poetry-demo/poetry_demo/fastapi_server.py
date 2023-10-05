@@ -30,13 +30,6 @@ def custom_openapi():
 
 app.openapi = custom_openapi
 
-# Default NATS port value
-DEFAULT_NATS_PORT = 4222
-
-# Add a command-line argument for NATS port
-parser = argparse.ArgumentParser(description="FastAPI app with NATS integration")
-parser.add_argument("--nats-port", type=int, default=DEFAULT_NATS_PORT, help="NATS server port")
-
 @app.get("/connect-nats")
 async def connect_nats(num: str = Header(None),operator: str = Header(None),
     user_id: str = Header(None)
@@ -50,7 +43,7 @@ async def connect_nats(num: str = Header(None),operator: str = Header(None),
         "operator": operator 
     }
     nc = NATS()
-    await nc.connect(nats://localhost:4222")  # Updated connection to use environment variable
+    await nc.connect("nats://localhost:4222")  # Updated connection to use environment variable
 
     try:
         response = await nc.request(subject, json.dumps(request_data).encode(), timeout=30)
@@ -62,9 +55,5 @@ async def connect_nats(num: str = Header(None),operator: str = Header(None),
         print("An error occurred while communicating with the calculator service:", str(e))
 
 if __name__ == "__main__":
-    
-
-    # Read the NATS server address from the environment variable
-    nats_server_address = os.environ.get("NATS_SERVER_ADDRESS", "localhost")
 
     uvicorn.run(app, host="0.0.0.0", port=8000)
