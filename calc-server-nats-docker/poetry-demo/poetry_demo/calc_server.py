@@ -92,24 +92,20 @@ async def handle_message(msg):
         # Handle the error 
         print(f"Error publishing message: {str(e)}")
 
-async def start_server(nats_port):
-    await nc.connect(nats://localhost:4222")  # Updated connection to use environment variable
+async def start_server():
+    await nc.connect("nats://localhost:4222")  # Updated connection to use environment variable
     await nc.subscribe("calc", cb=handle_message)
 
 ######### running the NATS server ########
 if __name__ == "__main__":
-    parser = ArgumentParser(description="NATS Server")
-    parser.add_argument("--nats-port", type=int, default=4222, help="NATS server port")
-
-    args = parser.parse_args()
+    
 
     nc = NATS()
     loop = asyncio.get_event_loop()
        # Read the NATS server address from the environment variable
-    nats_server_address = os.environ.get("NATS_SERVER_ADDRESS", "localhost")
 
     try:
-        loop.run_until_complete(start_server(args.nats_port))
+        loop.run_until_complete(start_server())
         print("the server is up and running")
         loop.run_forever()  # Keep the event loop running indefinitely
 

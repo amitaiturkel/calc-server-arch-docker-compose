@@ -13,4 +13,4 @@ RUN pip install --no-cache-dir poetry && \
     poetry install --no-dev --no-interaction --no-ansi
 
 # Define the command to run your Python application
-CMD ["python", "poetry_demo/calc_server.py", "--nats-port", "4222"]
+CMD ["python", "poetry_demo/calc_server.py"]
