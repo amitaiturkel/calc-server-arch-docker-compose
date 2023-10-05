@@ -8,9 +8,6 @@ services:
   calc-server:
     build:
       context: ./calc-server-nats-docker/poetry-demo
-    environment:
-      - NATS_PORT=4222
-      - NATS_SERVER_ADDRESS=nats
     depends_on:
       - nats
     # Add your calc-server command here
